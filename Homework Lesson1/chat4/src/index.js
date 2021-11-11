@@ -1,20 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const TEXT = `Hello My first homework with React!`;
-
-function Message(props) {
-  return <h1 style = {{ textAlign: "center", color: "#013220", font: "Helvetica", fontSize: "25px" }}>{props.name}</h1>
-};
-
 const App = () => {
-  //console.log("Test1 in App", );
+const [messageList, setMessageList] = useState([]);
+
   return (
     <div>
-      <Message name={TEXT}/>
+      <Messages messageList/>
+      <SendMessageForm />
     </div>
   );
+};
+
+const Messages = () => {
+  return (
+    <ul className="message-list">
+        {messageList.map((message, index) => {
+            return (
+              <li className="message">
+                <div>{message.text}</div>
+                <div>{message.author}</div>
+              </li>
+            )
+        })}
+    </ul>
+)
+};
+
+const SendMessageForm = () => {
+  return (
+    <form>
+      <input value="{message}" type="text" placeholder="Введите сообщение и нажмите Enter" />
+      <button onClick={handleClick}>Отправить</button>
+    </form>
+  )
+};
+const handleClick = (e) => {
+  setMessageList(MessageList.push(e.target.value))
 };
 
 ReactDOM.render(<App />,document.getElementById('root'));
