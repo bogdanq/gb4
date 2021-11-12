@@ -16,6 +16,7 @@ const dark = createTheme({
   },
 });
 
+// @TODO router ChatPage
 ReactDOM.render(
   <ThemeProvider theme={light}>
     <Layout
