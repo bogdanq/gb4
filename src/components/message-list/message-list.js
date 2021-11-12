@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Input, Button, InputAdornment } from "@mui/material";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Input, InputAdornment } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 // import PropTypes from "prop-types";
 import { Message } from "./message";
-import styles from "./message-list.module.css";
 
 // jss
 export const useStyles = makeStyles((ctx) => {
@@ -26,9 +25,14 @@ export const MessageList = () => {
   const [messageList, setMessageList] = useState([]);
   const [value, setValue] = useState("");
 
+  const ref = useRef(null);
+
   const sendMessage = () => {
     if (value) {
-      setMessageList([...messageList, { author: "User", message: value }]);
+      setMessageList([
+        ...messageList,
+        { author: "User", message: value, date: new Date() },
+      ]);
       setValue("");
     }
   };
@@ -39,6 +43,16 @@ export const MessageList = () => {
     }
   };
 
+  const handleScrollBottom = useCallback(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleScrollBottom();
+  }, [messageList, handleScrollBottom]);
+
   useEffect(() => {
     const lastMessage = messageList[messageList.length - 1];
 
@@ -46,17 +60,19 @@ export const MessageList = () => {
       setTimeout(() => {
         setMessageList([
           ...messageList,
-          { author: "Bot", message: "Hello from Bot" },
+          { author: "Bot", message: "Hello from Bot", date: new Date() },
         ]);
       }, 500);
     }
   }, [messageList]);
 
   return (
-    <div className={styles.wrapper}>
-      {messageList.map((message, index) => (
-        <Message key={index} message={message} />
-      ))}
+    <>
+      <div ref={ref}>
+        {messageList.map((message, index) => (
+          <Message key={index} message={message} />
+        ))}
+      </div>
 
       <Input
         className={s.input}
@@ -71,7 +87,7 @@ export const MessageList = () => {
           </InputAdornment>
         }
       />
-    </div>
+    </>
   );
 };
 

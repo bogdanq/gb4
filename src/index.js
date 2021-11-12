@@ -1,7 +1,8 @@
 import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 import ReactDOM from "react-dom";
-import { MessageList } from "./components";
+import { Layout, Header, ChatList, MessageList } from "./components";
+import "./global.css";
 
 const light = createTheme({
   theme: {
@@ -17,7 +18,11 @@ const dark = createTheme({
 
 ReactDOM.render(
   <ThemeProvider theme={light}>
-    <MessageList />
+    <Layout
+      header={<Header />}
+      chats={<ChatList />}
+      messages={<MessageList />}
+    />
   </ThemeProvider>,
   document.getElementById("root")
 );
