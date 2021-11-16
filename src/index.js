@@ -6,15 +6,20 @@ import { ChatPage, ProfilePage } from "./pages";
 import { Header } from "./components";
 import "./global.css";
 
-const light = createTheme({
-  theme: {
-    color: "#fff",
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#9a9fa1",
+    },
+    secondary: {
+      main: "#2b5278",
+    },
   },
 });
 
 const Root = () => {
   return (
-    <ThemeProvider theme={light}>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Header />
         <Routes>

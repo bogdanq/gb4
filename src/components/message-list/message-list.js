@@ -2,23 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Input, InputAdornment } from "@mui/material";
 import { Send } from "@mui/icons-material";
-import { makeStyles } from "@mui/styles";
-// import PropTypes from "prop-types";
 import { Message } from "./message";
-
-// jss
-export const useStyles = makeStyles((ctx) => {
-  return {
-    input: {
-      color: "#9a9fa1",
-      padding: "10px 15px",
-      fontSize: "15px",
-    },
-    icon: {
-      color: "#2b5278",
-    },
-  };
-});
+import { useStyles } from "./use-styles";
+import { useBotAnswer } from "./hooks/use-bot-answer";
 
 export const MessageList = () => {
   const s = useStyles();
@@ -62,16 +48,7 @@ export const MessageList = () => {
     handleScrollBottom();
   }, [messageList, handleScrollBottom]);
 
-  useEffect(() => {
-    const messages = messageList[roomId] ?? [];
-    const lastMessage = messages[messages.length - 1];
-
-    if (messages.length && lastMessage.author === "User") {
-      setTimeout(() => {
-        sendMessage("Bot", "Hello from bot");
-      }, 500);
-    }
-  }, [messageList, sendMessage, roomId]);
+  useBotAnswer(messageList, sendMessage);
 
   const messages = messageList[roomId] ?? [];
 
