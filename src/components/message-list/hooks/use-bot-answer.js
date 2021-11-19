@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export const useBotAnswer = (messageList, sendMessage) => {
+export const useBotAnswer = (messages, sendMessage) => {
   const { roomId } = useParams();
 
   useEffect(() => {
-    const messages = messageList[roomId] ?? [];
     const lastMessage = messages[messages.length - 1];
 
     if (messages.length && lastMessage.author === "User") {
@@ -13,5 +12,5 @@ export const useBotAnswer = (messageList, sendMessage) => {
         sendMessage("Bot", "Hello from bot");
       }, 500);
     }
-  }, [messageList, sendMessage, roomId]);
+  }, [messages, sendMessage, roomId]);
 };

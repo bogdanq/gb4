@@ -1,40 +1,47 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Input, InputAdornment } from "@mui/material";
 import { Send } from "@mui/icons-material";
+import { sendMessage, messageSelector } from "../../store/messages";
 import { Message } from "./message";
 import { useStyles } from "./use-styles";
 import { useBotAnswer } from "./hooks/use-bot-answer";
 
 export const MessageList = () => {
   const s = useStyles();
+  const dispatch = useDispatch();
   const { roomId } = useParams();
-
-  const [messageList, setMessageList] = useState({});
   const [value, setValue] = useState("");
+
+  const messageSelectorByMemo = useMemo(
+    () => messageSelector(roomId),
+    [roomId]
+  );
+
+  const messages = useSelector(messageSelectorByMemo);
 
   const ref = useRef(null);
 
-  const sendMessage = useCallback(
+  const send = useCallback(
     (message, author = "User") => {
       if (message) {
-        setMessageList({
-          ...messageList,
-          [roomId]: [
-            ...(messageList[roomId] ?? []),
-            { author, message, date: new Date() },
-          ],
-        });
-
+        dispatch(sendMessage({ author, message }, roomId));
         setValue("");
       }
     },
-    [messageList, roomId]
+    [dispatch, roomId]
   );
 
   const handlePressInput = ({ code }) => {
     if (code === "Enter") {
-      sendMessage(value);
+      send(value);
     }
   };
 
@@ -46,11 +53,9 @@ export const MessageList = () => {
 
   useEffect(() => {
     handleScrollBottom();
-  }, [messageList, handleScrollBottom]);
+  }, [handleScrollBottom, messages]);
 
-  useBotAnswer(messageList, sendMessage);
-
-  const messages = messageList[roomId] ?? [];
+  useBotAnswer(messages, send);
 
   return (
     <>
@@ -69,9 +74,7 @@ export const MessageList = () => {
         onKeyPress={handlePressInput}
         endAdornment={
           <InputAdornment position="end">
-            {value && (
-              <Send onClick={() => sendMessage(value)} className={s.icon} />
-            )}
+            {value && <Send onClick={() => send(value)} className={s.icon} />}
           </InputAdornment>
         }
       />

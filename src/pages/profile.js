@@ -1,13 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import { togleVisibleProfile } from "../store/profile";
+import { togleVisibleProfile, profileSelector } from "../store/profile";
 import { ProfileForm } from "../components";
 
 export const ProfilePage = () => {
-  const { isVisibleProfile, firstName, lastName, ...profile } = useSelector(
-    (state) => {
-      return state.profile;
-    }
-  );
+  const { isVisibleProfile, firstName, lastName, ...profile } =
+    useSelector(profileSelector);
 
   const dispatch = useDispatch();
 
