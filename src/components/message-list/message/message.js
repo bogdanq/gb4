@@ -15,10 +15,10 @@ export const Message = withCounter(
         <p>{message.author}</p>
         <p>12.03</p>
         <hr />
-        {/* @TODO удалить */}
+        {/* @TODO удалить
         <p>{count}</p>
         <button onClick={decrement}>decrement</button>
-        <button onClick={increment}>increment</button>
+        <button onClick={increment}>increment</button> */}
       </div>
     );
   }

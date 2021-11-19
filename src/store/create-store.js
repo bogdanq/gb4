@@ -1,5 +1,9 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 // import { createStore } from "./my-redux";
-import { counterReducer } from "./count";
+import { profileReducer } from "./profile";
 
-export const store = createStore(counterReducer);
+export const reducer = combineReducers({
+  profile: profileReducer,
+});
+
+export const store = createStore(reducer);
