@@ -1,39 +1,40 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Input, InputAdornment } from "@mui/material";
 import { Send } from "@mui/icons-material";
-import { sendMessage, messageSelector } from "../../store/messages";
+import { messageSelector, sendMessageWithBot } from "../../store/messages";
+import {
+  messageValueSelector,
+  handleChangeMessageValue,
+} from "../../store/conversations";
 import { Message } from "./message";
 import { useStyles } from "./use-styles";
-import { useBotAnswer } from "./hooks/use-bot-answer";
 
 export const MessageList = () => {
   const s = useStyles();
   const dispatch = useDispatch();
   const { roomId } = useParams();
-  const [value, setValue] = useState("");
 
   const messageSelectorByMemo = useMemo(
     () => messageSelector(roomId),
     [roomId]
   );
 
+  const messageValueSelectorByMemo = useMemo(
+    () => messageValueSelector(roomId),
+    [roomId]
+  );
+
   const messages = useSelector(messageSelectorByMemo);
+  const value = useSelector(messageValueSelectorByMemo);
 
   const ref = useRef(null);
 
   const send = useCallback(
     (message, author = "User") => {
       if (message) {
-        dispatch(sendMessage({ author, message }, roomId));
-        setValue("");
+        dispatch(sendMessageWithBot({ author, message }, roomId));
       }
     },
     [dispatch, roomId]
@@ -55,7 +56,7 @@ export const MessageList = () => {
     handleScrollBottom();
   }, [handleScrollBottom, messages]);
 
-  useBotAnswer(messages, send);
+  // useBotAnswer(messages, send);
 
   return (
     <>
@@ -70,7 +71,9 @@ export const MessageList = () => {
         fullWidth
         placeholder="Введите сообщение..."
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) =>
+          dispatch(handleChangeMessageValue(e.target.value, roomId))
+        }
         onKeyPress={handlePressInput}
         endAdornment={
           <InputAdornment position="end">
