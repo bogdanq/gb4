@@ -1,1 +1,1 @@
-export const REMOVE_CONVERSATION = "@conversations/remove conversation by id";
+export const REMOVE_CONVERSATION = "@global/remove conversation by id";

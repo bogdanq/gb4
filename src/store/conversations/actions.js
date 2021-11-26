@@ -1,7 +1,6 @@
 import { CREATE_CONVERSATION, HANDLE_CHANGE_MESSAGE_VALUE } from "./types";
 import { REMOVE_CONVERSATION } from "../types";
 
-// @TODO сделать обработку в редюсере
 export const createConversation = (conversation) => ({
   type: CREATE_CONVERSATION,
   payload: conversation,
