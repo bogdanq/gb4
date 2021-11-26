@@ -1,4 +1,5 @@
-import { HANDLE_CHANGE_MESSAGE_VALUE } from "./types";
+import { REMOVE_CONVERSATION } from "../types";
+import { HANDLE_CHANGE_MESSAGE_VALUE, CREATE_CONVERSATION } from "./types";
 
 const initialState = {
   conversations: [
@@ -13,7 +14,6 @@ const initialState = {
   ],
 };
 
-// @TODO сделать удаление комнаты
 export const conversationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case HANDLE_CHANGE_MESSAGE_VALUE:
@@ -24,6 +24,22 @@ export const conversationsReducer = (state = initialState, action) => {
             ? { ...conversation, value: action.payload.value }
             : conversation;
         }),
+      };
+    case REMOVE_CONVERSATION:
+      return {
+        ...state,
+        conversations: state.conversations.filter(
+          (conversation) => conversation.title !== action.payload
+        ),
+      };
+
+    case CREATE_CONVERSATION:
+      return {
+        ...state,
+        conversations: [
+          ...state.conversations,
+          { title: action.payload, value: "" },
+        ],
       };
     default:
       return state;

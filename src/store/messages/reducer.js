@@ -1,3 +1,4 @@
+import { REMOVE_CONVERSATION } from "../types";
 import { SEND_MESSAGE, DELETE_MESSAGE_BY_ID } from "./types";
 
 const initialState = {
@@ -12,7 +13,6 @@ const initialState = {
   },
 };
 
-// @TODO сделать удаление всех сообщений комнаты
 export const messagesReducer = (state = initialState, action) => {
   switch (action.type) {
     case SEND_MESSAGE:
@@ -36,6 +36,20 @@ export const messagesReducer = (state = initialState, action) => {
             (message) => message.id !== action.payload.messageId
           ),
         },
+      };
+
+    case REMOVE_CONVERSATION:
+      return {
+        ...state,
+        messages: Object.entries(state.messages).reduce((acc, [key, value]) => {
+          if (key === action.payload) {
+            return acc;
+          }
+
+          acc[key] = value;
+
+          return acc;
+        }, {}),
       };
 
     default:

@@ -1,11 +1,8 @@
-import {
-  CREATE_CONVERSATION,
-  HANDLE_CHANGE_MESSAGE_VALUE,
-  DELETE_CONVERSATION,
-} from "./types";
+import { CREATE_CONVERSATION, HANDLE_CHANGE_MESSAGE_VALUE } from "./types";
+import { REMOVE_CONVERSATION } from "../types";
 
 // @TODO сделать обработку в редюсере
-export const createConversations = (conversation) => ({
+export const createConversation = (conversation) => ({
   type: CREATE_CONVERSATION,
   payload: conversation,
 });
@@ -15,8 +12,7 @@ export const handleChangeMessageValue = (value, roomId) => ({
   payload: { value, roomId },
 });
 
-// @TODO описать его в редюсере
-export const deleteConversation = (roomId) => ({
-  type: DELETE_CONVERSATION,
-  payload: roomId,
+export const removeConversationById = (conversationId) => ({
+  type: REMOVE_CONVERSATION,
+  payload: conversationId,
 });

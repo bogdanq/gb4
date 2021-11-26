@@ -1,6 +1,8 @@
 import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import { AccountCircle } from "@mui/icons-material";
+import { removeConversationById } from "../../../store/conversations";
 import styles from "./chat.module.css";
 
 const useStyles = makeStyles(() => {
@@ -19,6 +21,8 @@ const useStyles = makeStyles(() => {
 export function Chat({ title, selected, handleListItemClick }) {
   const s = useStyles();
 
+  const dispatch = useDispatch();
+
   return (
     <ListItem
       className={s.item}
@@ -32,6 +36,11 @@ export function Chat({ title, selected, handleListItemClick }) {
       <div className={styles.description}>
         <ListItemText className={styles.text} primary={title} />
         <ListItemText className={styles.text} primary="12.30" />
+        <ListItemText
+          className={styles.text}
+          primary="X"
+          onClick={() => dispatch(removeConversationById(title))}
+        />
       </div>
     </ListItem>
   );
