@@ -17,3 +17,19 @@ export const sendMessageWithBot = (message, roomId) => (dispatch, getState) => {
     }, 500);
   }
 };
+
+export const getMessagesFB = () => (dispatch, _, api) => {
+  api
+    .getMessagesApi()
+    .then((snapshot) => {
+      const messages = {};
+
+      snapshot.forEach((snap) => {
+        messages[snap.key] = Object.values(snap.val());
+      });
+
+      dispatch({ type: "GET_MESSAGES_SUCCESS", payload: messages });
+      console.log("messages", messages);
+    })
+    .catch((e) => console.log("error", e));
+};
