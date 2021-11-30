@@ -1,4 +1,11 @@
-import { gistsStart, gistsError, gistsSuccess } from "./actions";
+import {
+  gistsStart,
+  gistsError,
+  gistsSuccess,
+  searchGistsByUserNameStart,
+  searchGistsByUserNameSuccess,
+  searchGistsByUserNameError,
+} from "./actions";
 
 export const getGists =
   (page = 1) =>
@@ -14,7 +21,16 @@ export const getGists =
     }
   };
 
-//@TODO закончить санк
 export const searchGistsByUserName =
   (name = "") =>
-  async (dispatch, _, api) => {};
+  async (dispatch, _, api) => {
+    try {
+      dispatch(searchGistsByUserNameStart());
+
+      const { data } = await api.searchGistsByUserNameApi(name);
+
+      dispatch(searchGistsByUserNameSuccess(data));
+    } catch (e) {
+      dispatch(searchGistsByUserNameError(e));
+    }
+  };
