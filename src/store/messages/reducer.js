@@ -1,16 +1,16 @@
 import { REMOVE_CONVERSATION } from "../types";
-import { SEND_MESSAGE, DELETE_MESSAGE_BY_ID } from "./types";
+import {
+  SEND_MESSAGE,
+  DELETE_MESSAGE_BY_ID,
+  GET_MESSAGES_SUCCESS,
+  GET_MESSAGES_ERROR,
+  GET_MESSAGES,
+} from "./types";
 
 const initialState = {
-  messages: {
-    room1: [
-      {
-        id: new Date().toISOString(),
-        author: "Bot",
-        message: "Hello from bot to room 1",
-      },
-    ],
-  },
+  messages: {},
+  messagesLoading: false,
+  messagesError: null,
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -52,6 +52,22 @@ export const messagesReducer = (state = initialState, action) => {
         }, {}),
       };
 
+    case GET_MESSAGES:
+      return { ...state, messagesLoading: true, messagesError: null };
+
+    case GET_MESSAGES_SUCCESS:
+      return {
+        ...state,
+        messagesLoading: false,
+        messages: action.payload,
+      };
+
+    case GET_MESSAGES_ERROR:
+      return {
+        ...state,
+        messagesLoading: false,
+        messagesError: action.payload,
+      };
     default:
       return state;
   }

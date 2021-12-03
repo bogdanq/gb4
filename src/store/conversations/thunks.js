@@ -1,16 +1,23 @@
-export const getConversationsFB = () => (dispatch, _, api) => {
-  api
-    .getConversationsApi()
-    .then((snapshot) => {
-      const conversations = [];
+import {
+  getConversationsStart,
+  getConversationsError,
+  getConversationsSuccess,
+} from "./actions";
 
-      snapshot.forEach((snap) => {
-        conversations.push(snap.val());
-      });
+export const getConversationsFB = () => async (dispatch, _, api) => {
+  const conversations = [];
 
-      dispatch({ type: "GET_CONVERSATIONS_SUCCESS", payload: conversations });
+  try {
+    dispatch(getConversationsStart());
 
-      console.log("conversations", conversations);
-    })
-    .catch((e) => console.log("error", e));
+    const snapshot = await api.getConversationsApi();
+
+    snapshot.forEach((snap) => {
+      conversations.push(snap.val());
+    });
+
+    dispatch(getConversationsSuccess(conversations));
+  } catch (e) {
+    dispatch(getConversationsError(e));
+  }
 };

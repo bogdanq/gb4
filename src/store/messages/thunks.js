@@ -1,5 +1,10 @@
 import { handleChangeMessageValue } from "../conversations";
-import { sendMessage } from "./actions";
+import {
+  sendMessage,
+  getConversationsStart,
+  getConversationsSuccess,
+  getConversationsError,
+} from "./actions";
 
 export const sendMessageWithBot = (message, roomId) => (dispatch, getState) => {
   const cansel = dispatch(sendMessage(message, roomId));
@@ -19,6 +24,8 @@ export const sendMessageWithBot = (message, roomId) => (dispatch, getState) => {
 };
 
 export const getMessagesFB = () => (dispatch, _, api) => {
+  dispatch(getConversationsStart());
+
   api
     .getMessagesApi()
     .then((snapshot) => {
@@ -28,8 +35,7 @@ export const getMessagesFB = () => (dispatch, _, api) => {
         messages[snap.key] = Object.values(snap.val());
       });
 
-      dispatch({ type: "GET_MESSAGES_SUCCESS", payload: messages });
-      console.log("messages", messages);
+      dispatch(getConversationsSuccess(messages));
     })
-    .catch((e) => console.log("error", e));
+    .catch((e) => dispatch(getConversationsError(e)));
 };
